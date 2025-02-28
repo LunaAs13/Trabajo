@@ -206,6 +206,8 @@ elif [[ "${palabra1,,}" == "-filterncolumnvalues" ]]
 		((IT++))
 	done
 	cat help.txt
+	rm help2.txt
+	rm help.txt
 	#echo "temunado"
 
 
