@@ -71,7 +71,7 @@ if [[ "${palabra1,,}" == "-help" ]]; then
 			indicated, it will show every record since beginingDate"
 	echo "-filterTime beginingTime endTime ; Shows all complete records between beginingTime and endTime if endTime is not 
 			indicated, it will show every record since beginingTime until midnight."
-   	echo "-filterColumnNValues	; Show all complete record that contain the indicated values"
+   	echo "-filterNColumnValues nColunm column1 value1 .... columnN valueN	; Show all complete record that contains the n indicated values in the specified columns"
 	
 
 elif [[ "${palabra1,,}" == "-filtercolumn" ]] 
@@ -107,7 +107,6 @@ elif [[ "${palabra1,,}" == "-filtercolumnvalue" ]]
 		num=$((CONT+3))
 		valor=${!num}
 		
-		echo $valor "Valooooor"
 		cat MplsStops.csv | awk -F "," -v nCol="$numeroColumna" -v bien="$valor" 'NR>1{
 				if ($nCol == bien) {
 					print $0;
@@ -173,13 +172,42 @@ elif [[ "${palabra1,,}" == "-filtertime" ]]
 			}'
 	fi
 
- elif [[ "${palabra1,,}" == "-filtercolumnnvalues" ]]
- 	then
-  	if [[ -z $2 ]]
-   	then
-    		echo "The use of -filterColumnNValues requires at least 2 parameters"
-      		break
-	fi
+
+elif [[ "${palabra1,,}" == "-filterncolumnvalues" ]]
+	then
+		echo ""
+		if [[ -z $2 || -z $3 || -z $4 ]]
+		then
+				echo "The use of -filterncolumnvalues requires at least 3 parameters"
+				break
+		fi
+	num=$2
+	PUNTERO=3
+	IT=0
+	cat MplsStops.csv > help.txt
+	while [ $IT -lt $num ]
+	do
+		#cat help.txt | wc -l
+		columna=${!PUNTERO}
+		numeroColumna $columna
+		((PUNTERO++))
+		valor=${!PUNTERO}
+		((PUNTERO++))
+
+		cat help.txt | awk -F "," -v nCol="$numeroColumna" -v bien="$valor" 'NR>1{
+				if ($nCol == bien) {
+					print $0;
+				}
+		}' > help2.txt
+
+		cat help2.txt > help.txt
+
+		#cat help.txt | wc -l
+		((IT++))
+	done
+	cat help.txt
+	#echo "temunado"
+
 
 else
 	echo "Argument not found. Use -help to see the options"

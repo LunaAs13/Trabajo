@@ -1,4 +1,3 @@
-
 6832,17-000139,2017-01-01T07:05:50Z,traffic,MDC,,NO,NO,Unknown,Black,Male,45.01327,-93.30824,4,Folwell
 6835,17-000169,2017-01-01T07:19:59Z,traffic,MDC,,NO,NO,Unknown,Black,Male,44.99871047,-93.2530799,2,St. Anthony East
 6836,17-000176,2017-01-01T07:22:01Z,traffic,MDC,,NO,NO,Unknown,Black,Male,44.97957,-93.27257,1,Downtown West
