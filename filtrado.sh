@@ -96,10 +96,10 @@ elif [[ "${palabra1,,}" == "-filtercolumnvalue" ]]
 	nombreColumna=$2
 	numeroColumna $nombreColumna
 
- 	cont=2
+ 	CONT=2
   	while cont -le $@
    	do
-		cat MplsStops.csv | awk -F "," -v nCol="$numeroColumna" -v valor="$cont" 'NR>1{
+		cat MplsStops.csv | awk -F "," -v nCol="$numeroColumna" -v valor="$CONT" 'NR>1{
 				if ($nCol == valor) {
 					print $0;
 				}
