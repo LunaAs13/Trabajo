@@ -88,23 +88,27 @@ elif [[ "${palabra1,,}" == "-filtercolumn" ]]
  
 elif [[ "${palabra1,,}" == "-filtercolumnvalue" ]]
 	then
-	if [[ -z $2 || -z $3 ]]
+	if [[ -z $2 || -z $3 || -z $4 ]]
 	then
-		echo "The use of -filterColumnValue requires 2 parameters"
+		echo "The use of -filterColumnValue requires 3 parameters"
 		break
 	fi
 	nombreColumna=$2
 	numeroColumna $nombreColumna
 
- 	CONT=2
-	MAX=$#
-	echo $MAX
-  	while [ $CONT -le $MAX ]
+	numeroParametros=$3
+
+ 	CONT=1
+	echo "Hola"
+	echo $CONT
+	echo $numeroParametros
+  	while [ $CONT -le $numeroParametros ]
    	do
-		valor=$($CONT)
-		echo $valor
+		num=$((CONT+3))
+		valor=${!num}
+		
+		echo $valor "Valooooor"
 		cat MplsStops.csv | awk -F "," -v nCol="$numeroColumna" -v bien="$valor" 'NR>1{
-				print bien;
 				if ($nCol == bien) {
 					print $0;
 				}
