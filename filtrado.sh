@@ -92,7 +92,14 @@ elif [[ "${palabra1,,}" == "-filtercolumnvalue" ]]
 	if [[ -z $2 || -z $3 || -z $4 ]]
 	then
 		echo "The use of -filterColumnValue requires 3 parameters"
+		exit 1
 		break
+	fi
+
+	if [[ ! "$3" =~ ^[0-9]+$ ]]
+	then
+		echo "The second parameter introduced must be the number of values you introduced"
+		exit 1
 	fi
 	nombreColumna=$2
 	numeroColumna $nombreColumna
@@ -100,13 +107,16 @@ elif [[ "${palabra1,,}" == "-filtercolumnvalue" ]]
 	numeroParametros=$3
 
  	CONT=1
-	echo "Hola"
-	echo $CONT
-	echo $numeroParametros
   	while [ $CONT -le $numeroParametros ]
    	do
 		num=$((CONT+3))
 		valor=${!num}
+
+		if [[ ! "$valor" =~ ^[a-zA-Z]+$ ]]
+		then
+			echo "The value of $valor is not a string"
+			exit 1
+		fi
 		
 		cat MplsStops.csv | awk -F "," -v nCol="$numeroColumna" -v bien="$valor" 'NR>1{
 				if ($nCol == bien) {
@@ -136,6 +146,11 @@ elif [[ "${palabra1,,}" == "-filterdate" ]]
 			}'
 
 	else 
+		if [[ ! "$3" =~ ^[a-zA-Z]+$ ]]
+		then
+			echo "The value of $3 is not a string"
+			exit 1
+		fi
 		cat MplsStops.csv | awk -F "," -v fechaIni="$2" -v fechaFin="$3" 'NR>1{
 				split($3, fecha, "T");
 				if (fecha[1] >= fechaIni && fecha[1] <= fechaFin) {
@@ -163,7 +178,12 @@ elif [[ "${palabra1,,}" == "-filtertime" ]]
 				}
 			}' 
 
-	else 
+	else
+		if [[ ! "$3" =~ ^[a-zA-Z]+$ ]]
+			then
+				echo "The value of $3 is not a string"
+				exit 1
+		fi
 		cat MplsStops.csv | awk -F "," -v timeIni="$2" -v timeFin="$3" 'NR>1{
 				split($3, time, "T");
 				if (time[2] >= timeIni && time[2] <= timeFin) {
@@ -182,6 +202,12 @@ elif [[ "${palabra1,,}" == "-filterncolumnvalues" ]]
 				echo "The use of -filterncolumnvalues requires at least 3 parameters"
 				break
 		fi
+		if [[ ! "$2" =~ ^[0-9]+$ ]]
+	then
+		echo "The first parameter introduced must be the number of values you introduced"
+		exit 1
+	fi
+		
 	num=$2
 	PUNTERO=3
 	IT=0
@@ -191,10 +217,20 @@ elif [[ "${palabra1,,}" == "-filterncolumnvalues" ]]
 	do
 		#cat help.txt | wc -l
 		columna=${!PUNTERO}
+		if [[ ! "$columna" =~ ^[a-zA-Z]+$ ]]
+			then
+				echo "The value of $columna is not a string"
+				exit 1
+		fi
 		numeroColumna $columna
 
 		((PUNTERO++))
 		valor=${!PUNTERO}
+		if [[ ! "$valor" =~ ^[a-zA-Z]+$ ]]
+			then
+				echo "The value of $valor is not a string"
+				exit 1
+		fi
 
 		((PUNTERO++))
 
