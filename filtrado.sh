@@ -64,7 +64,7 @@ esac
 
 if [[ "${palabra1,,}" == "-help" ]]; then	
 	echo "The use is ./filtro.sh [argument]"
-	echo "Te argument implemented are:"
+	echo "The argument implemented are:"
 	echo "-help"
 	echo "-filterColumn columnName	; Show the records of a column"
 	echo "-filterColumnValue columnName nValues value1 value2 ...valueN	; Show all complete records with the indicated values in the column"
@@ -84,7 +84,6 @@ elif [[ "${palabra1,,}" == "-filtercolumn" ]]
 	fi
 	nombreColumna=$2
 	numeroColumna $nombreColumna
-	#cat MplsStops.csv | sed 's/,/ /g' | awk '{print \$$numeroColumna}'
 	cat MplsStops.csv  | awk -F "," -v col="$numeroColumna" 'NR>1{print $col}'
  
 elif [[ "${palabra1,,}" == "-filtercolumnvalue" ]]
@@ -101,9 +100,9 @@ elif [[ "${palabra1,,}" == "-filtercolumnvalue" ]]
 		echo "The second parameter introduced must be the number of values you introduced"
 		exit 1
 	fi
+ 
 	nombreColumna=$2
 	numeroColumna $nombreColumna
-
 	numeroParametros=$3
 
  	CONT=1
@@ -222,8 +221,8 @@ elif [[ "${palabra1,,}" == "-filterncolumnvalues" ]]
 				echo "The value of $columna is not a string"
 				exit 1
 		fi
+  
 		numeroColumna $columna
-
 		((PUNTERO++))
 		valor=${!PUNTERO}
 		if [[ ! "$valor" =~ ^[a-zA-Z]+$ ]]
@@ -241,15 +240,12 @@ elif [[ "${palabra1,,}" == "-filterncolumnvalues" ]]
 		}' > help2.txt
 
 		cat help2.txt > help.txt
-
-		#cat help.txt | wc -l
 		((IT++))
 	done
+ 
 	cat help.txt
 	rm help2.txt
 	rm help.txt
-	#echo "temunado"
-
 
 else
 	echo "Argument not found. Use -help to see the options"
