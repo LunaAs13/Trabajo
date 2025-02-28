@@ -96,14 +96,20 @@ elif [[ "${palabra1,,}" == "-filtercolumnvalue" ]]
 	nombreColumna=$2
 	numeroColumna $nombreColumna
 
- 	cont=2
-  	while cont -le $@
+ 	CONT=2
+	MAX=$#
+	echo $MAX
+  	while [ $CONT -le $MAX ]
    	do
-		cat MplsStops.csv | awk -F "," -v nCol="$numeroColumna" -v valor="$cont" 'NR>1{
-				if ($nCol == valor) {
+		valor=$($CONT)
+		echo $valor
+		cat MplsStops.csv | awk -F "," -v nCol="$numeroColumna" -v bien="$valor" 'NR>1{
+				print bien;
+				if ($nCol == bien) {
 					print $0;
 				}
 		}'
+
 		((CONT++))
   	done
   
