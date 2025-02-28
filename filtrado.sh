@@ -8,11 +8,23 @@ numeroColumna=-1
 function numeroColumna(){
 	nombre=$1
 	case "$nombre" in
+		"rownames")
+			numeroColumna=1
+			;;
+		"idNum")
+			numeroColumna=2
+			;;
 		"date")
 			numeroColumna=3
 			;;
 		"problem")
 			numeroColumna=4
+			;;
+		"MDC")
+			numeroColumna=5
+			;;
+		"citationIssued")
+			numeroColumna=6
 			;;
 		"personSearch")
 			numeroColumna=7
@@ -20,11 +32,23 @@ function numeroColumna(){
 		"vehicleSearch")
 			numeroColumna=8
 			;;
+		"preRace")
+			numeroColumna=9
+			;;
 		"race")
 			numeroColumna=10
 			;;
 		"gender")
 			numeroColumna=11
+			;;
+		"lat")
+			numeroColumna=12
+			;;
+		"long")
+			numeroColumna=13
+			;;
+		"policePrecinct")
+			numeroColumna=14
 			;;
 		"neighborhood")
 			numeroColumna=15
