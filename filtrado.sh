@@ -66,7 +66,7 @@ if [[ "${palabra1,,}" == "-help" ]]; then
 	echo "Te argument implemented are:"
 	echo "-help"
 	echo "-filterColumn columnName	; Show the records of a column"
-	echo "-filterColumnValue columnName value	; Show all complete records with the indicated values in the column"
+	echo "-filterColumnValue columnName nValues value1 value2 ...valueN	; Show all complete records with the indicated values in the column"
 	echo "-filterDate beginingDate endDate	; Shows all complete records between beginingDate and endDate if endDate is not 
 			indicated, it will show every record since beginingDate"
 	echo "-filterTime beginingTime endTime ; Shows all complete records between beginingTime and endTime if endTime is not 
