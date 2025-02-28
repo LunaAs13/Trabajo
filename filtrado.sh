@@ -1,5 +1,7 @@
 #!/bin/bash
 
+#POSIBLES IMPLEMENTACIONES AÑADIDAS: caso mas comun en columna, numero de veces que aparece valor en columna, posibles valores de columna
+
 palabra1=$1
 numeroColumna=-1
 
