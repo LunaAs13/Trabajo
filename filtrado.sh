@@ -65,12 +65,13 @@ if [[ "${palabra1,,}" == "-help" ]]; then
 	echo "The use is ./filtro.sh [argument]"
 	echo "Te argument implemented are:"
 	echo "-help"
-	echo "-filterColumn columnName 	; Show the records of a column"
-	echo "-filterColumnValue columnName value	; Show all complete records with the infdicated values in the column"
+	echo "-filterColumn columnName	; Show the records of a column"
+	echo "-filterColumnValue columnName value	; Show all complete records with the indicated values in the column"
 	echo "-filterDate beginingDate endDate	; Shows all complete records between beginingDate and endDate if endDate is not 
 			indicated, it will show every record since beginingDate"
 	echo "-filterTime beginingTime endTime ; Shows all complete records between beginingTime and endTime if endTime is not 
 			indicated, it will show every record since beginingTime until midnight."
+   	echo "-filterColumnNValues	; Show all complete record that contain the indicated values"
 	
 
 elif [[ "${palabra1,,}" == "-filtercolumn" ]] 
@@ -84,6 +85,7 @@ elif [[ "${palabra1,,}" == "-filtercolumn" ]]
 	numeroColumna $nombreColumna
 	#cat MplsStops.csv | sed 's/,/ /g' | awk '{print \$$numeroColumna}'
 	cat MplsStops.csv  | awk -F "," -v col="$numeroColumna" 'NR>1{print $col}'
+ 
 elif [[ "${palabra1,,}" == "-filtercolumnvalue" ]]
 	then
 	if [[ -z $2 || -z $3 ]]
@@ -94,16 +96,17 @@ elif [[ "${palabra1,,}" == "-filtercolumnvalue" ]]
 	nombreColumna=$2
 	numeroColumna $nombreColumna
 
-	cat MplsStops.csv | awk -F "," -v nCol="$numeroColumna" -v valor="$3" 'NR>1{
-			split(valor, valores, "/");
-	
-			for(i=1; i <= length(valores); i++) {
-				if ($nCol == valores[i]) {
+ 	cont=2
+  	while cont -le $@
+   	do
+		cat MplsStops.csv | awk -F "," -v nCol="$numeroColumna" -v valor="$cont" 'NR>1{
+				if ($nCol == valor) {
 					print $0;
 				}
-			}
-			
 		}'
+		((CONT++))
+  	done
+  
 elif [[ "${palabra1,,}" == "-filterdate" ]]
 	then
 	if [[ -z $2 ]]
@@ -111,8 +114,6 @@ elif [[ "${palabra1,,}" == "-filterdate" ]]
 			echo "The use of -filterDatee requires at least 1 parameter"
 			break
 	fi
-
-
 	if [[ -z $3 ]]
 		then
 			
@@ -133,6 +134,7 @@ elif [[ "${palabra1,,}" == "-filterdate" ]]
 				}
 			}'
 	fi
+ 
 elif [[ "${palabra1,,}" == "-filtertime" ]]
 	then 
 		if [[ -z $2 ]]
@@ -140,7 +142,6 @@ elif [[ "${palabra1,,}" == "-filtertime" ]]
 				echo "The use of -filterDatee requires at least 1 parameter"
 				break
 		fi
-
 		if [[ -z $3 ]]
 		then
 			
@@ -160,6 +161,14 @@ elif [[ "${palabra1,,}" == "-filtertime" ]]
 					
 				}
 			}'
+	fi
+
+ elif [[ "${palabra1,,}" == "-filtercolumnnvalues" ]]
+ 	then
+  	if [[ -z $2 ]]
+   	then
+    		echo "The use of -filterColumnNValues requires at least 2 parameters"
+      		break
 	fi
 
 else
