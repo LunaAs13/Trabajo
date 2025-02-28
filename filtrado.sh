@@ -97,13 +97,19 @@ elif [[ "${palabra1,,}" == "-filtercolumnvalue" ]]
 	numeroColumna $nombreColumna
 
  	CONT=2
-  	while cont -le $@
+	MAX=$#
+	echo $MAX
+  	while [ $CONT -le $MAX ]
    	do
-		cat MplsStops.csv | awk -F "," -v nCol="$numeroColumna" -v valor="$CONT" 'NR>1{
-				if ($nCol == valor) {
+		valor=$($CONT)
+		echo $valor
+		cat MplsStops.csv | awk -F "," -v nCol="$numeroColumna" -v bien="$valor" 'NR>1{
+				print bien;
+				if ($nCol == bien) {
 					print $0;
 				}
 		}'
+
 		((CONT++))
   	done
   
@@ -174,5 +180,6 @@ elif [[ "${palabra1,,}" == "-filtertime" ]]
 else
 	echo "Argument not found. Use -help to see the options"
 fi
+
 
 
