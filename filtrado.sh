@@ -3,6 +3,8 @@
 palabra1=$1
 numeroColumna=-1
 
+#Buenos dias 
+
 function numeroColumna(){
 	nombre=$1
 	case "$nombre" in
