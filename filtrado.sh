@@ -55,6 +55,7 @@ function numeroColumna(){
 			;;
 		*)
 			echo "error no valid column"
+			exit 1
 			;;
 esac
 
@@ -184,17 +185,20 @@ elif [[ "${palabra1,,}" == "-filterncolumnvalues" ]]
 	num=$2
 	PUNTERO=3
 	IT=0
-	cat MplsStops.csv > help.txt
+	#eliminar la linea de los nombres de la columna
+	cat MplsStops.csv | awk 'NR>1' > help.txt
 	while [ $IT -lt $num ]
 	do
 		#cat help.txt | wc -l
 		columna=${!PUNTERO}
 		numeroColumna $columna
+
 		((PUNTERO++))
 		valor=${!PUNTERO}
+
 		((PUNTERO++))
 
-		cat help.txt | awk -F "," -v nCol="$numeroColumna" -v bien="$valor" 'NR>1{
+		cat help.txt | awk -F "," -v nCol="$numeroColumna" -v bien="$valor" '{
 				if ($nCol == bien) {
 					print $0;
 				}
