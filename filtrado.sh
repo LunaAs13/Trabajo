@@ -70,6 +70,8 @@ if [[ "${palabra1,,}" == "-help" ]]; then
 	echo "-help"
  	echo "-columnNames
   		Show all valid column names"
+    	echo "-columnValues [columnName]
+     		Show all values that appear in the specified column"
 	echo "-filterColumn [columnName]
 		Show the records of a column"
 	echo "-filterColumnValue [columnName] [nValues] [value1] [value2] ... [valueN] 
