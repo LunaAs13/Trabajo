@@ -9,13 +9,14 @@ CSV_NOM=$2
 #Buenos dias 
 
 function numeroColumna(){
+	nombre_buscar=$1
 	NOM_COLUMNAS=$(cat $CSV_NOM | head -n1 | sed 's/,/ /g' | sed -E 's/^[^[:space:]]+[[:space:]]*//')
 	CNT=1
  	for NOMBRE in $NOM_COLUMNAS
   	do
-   		if [ NOMBRE -eq $1 ]
+   		if [[ $NOMBRE == $nombre_buscar ]]
      		then
-     			numeroColumna=$CNT
+     			numeroColumna=$((CNT+1))
 		else
   			((CNT++))
   		fi
@@ -46,7 +47,7 @@ if [[ "${palabra1,,}" == "-help" ]]; then
 
 elif [[ "${palabra1,,}" == "-columnnames" ]]
 	then
- 	cat MplsStops.csv | head -n1 | sed 's/,/ /g' | sed -E 's/^[^[:space:]]+[[:space:]]*//'
+ 	cat $CSV_NOM | head -n1 | sed 's/,/ /g' | sed -E 's/^[^[:space:]]+[[:space:]]*//'
 
 elif [[ "${palabra1,,}" == "-columnvalues" ]]
 	then
@@ -62,7 +63,7 @@ elif [[ "${palabra1,,}" == "-columnvalues" ]]
     	fi
  	nombreColumna=$3
   	numeroColumna $nombreColumna
- 	cat MplsStops.csv | awk -F "," -v col="$numeroColumna" 'NR>1{print $col}' | sort -u
+ 	cat $CSV_NOM | awk -F "," -v col="$numeroColumna" 'NR>1{print $col}' | sort -u
 
 elif [[ "${palabra1,,}" == "-filtercolumn" ]] 
 	then
@@ -78,7 +79,31 @@ elif [[ "${palabra1,,}" == "-filtercolumn" ]]
     	fi
 	nombreColumna=$3
 	numeroColumna $nombreColumna
-	cat MplsStops.csv  | awk -F "," -v col="$numeroColumna" 'NR>1{print $col}'
+	cat $CSV_NOM  | awk -F "," -v col="$numeroColumna" 'NR>1{print $col}'
+
+elif [[ "${palabra1,,}" == "-columnstats" ]]
+	then
+		if [[ -z $3 || -z $2 ]]
+  		then
+			echo "The use of -columnStats requires 3 parameters"
+			exit 1
+			break
+    	fi
+		nombreColumna=$3
+  		numeroColumna $nombreColumna
+		cat $CSV_NOM | awk -F',' -v col="$numeroColumna" 'NR>1{print $col}' | sort | uniq -c | sort -nr
+	
+elif [[ "${palabra1,,}" == "-mostfrequencevalue" ]]
+	then 
+	if [[ -z $3 ]]
+  		then
+			echo  "The use of -mostFrequenceValue requires 3 parameters"
+			exit 1
+			break
+    	fi
+		nombreColumna=$3
+  		numeroColumna $nombreColumna
+		cat $CSV_NOM | awk -F',' -v col="$numeroColumna" 'NR>1{print $col}' | sort | uniq -c | sort -nr | head -n1 
  
 elif [[ "${palabra1,,}" == "-filtercolumnvalue" ]]
 	then
@@ -89,9 +114,10 @@ elif [[ "${palabra1,,}" == "-filtercolumnvalue" ]]
 		break
 	fi
 
-	if [[ ! "$3" =~ ^[0-9]+$ ]]
+	if [[ ! "$4" =~ ^[0-9]+$ ]]
 	then
 		echo "The third parameter introduced must be the number of values you introduced"
+		exit 1
 		
 	fi
  
@@ -105,7 +131,8 @@ elif [[ "${palabra1,,}" == "-filtercolumnvalue" ]]
 		num=$((CONT+4))
 		valor=${!num}
 		
-		cat MplsStops.csv | awk -F "," -v nCol="$numeroColumna" -v bien="$valor" 'NR>1{
+		cat $CSV_NOM | awk -F "," -v nCol="$numeroColumna" -v bien="$valor" 'NR>1{
+				
 				if ($nCol == bien) {
 					print $0;
 				}
@@ -125,7 +152,7 @@ elif [[ "${palabra1,,}" == "-filterdate" ]]
 	if [[ -z $3 ]]
 		then
 			
-			cat MplsStops.csv | awk -F "," -v fechaIni="$2" 'NR>1{
+			cat $CSV_NOM | awk -F "," -v fechaIni="$2" 'NR>1{
 				split($3, fecha, "T");
 				if (fecha[1] >= fechaIni) {
 					print $0;
@@ -139,7 +166,7 @@ elif [[ "${palabra1,,}" == "-filterdate" ]]
 			echo "The value of $3 is not a string"
 			exit 1
 		fi
-		cat MplsStops.csv | awk -F "," -v fechaIni="$2" -v fechaFin="$3" 'NR>1{
+		cat $CSV_NOM | awk -F "," -v fechaIni="$2" -v fechaFin="$3" 'NR>1{
 				split($3, fecha, "T");
 				if (fecha[1] >= fechaIni && fecha[1] <= fechaFin) {
 					print $0;
@@ -159,7 +186,7 @@ elif [[ "${palabra1,,}" == "-filtertime" ]]
 		if [[ -z $3 ]]
 		then
 			
-			cat MplsStops.csv | awk -F "," -v timeIni="$2" 'NR>1{
+			cat $CSV_NOM | awk -F "," -v timeIni="$2" 'NR>1{
 				split($3, time, "T");
 				if (time[2] >= timeIni) {
 					print $0;
@@ -173,7 +200,7 @@ elif [[ "${palabra1,,}" == "-filtertime" ]]
 				echo "The value of $3 is not a string"
 				exit 1
 		fi
-		cat MplsStops.csv | awk -F "," -v timeIni="$2" -v timeFin="$3" 'NR>1{
+		cat $CSV_NOM | awk -F "," -v timeIni="$2" -v timeFin="$3" 'NR>1{
 				split($3, time, "T");
 				if (time[2] >= timeIni && time[2] <= timeFin) {
 					print $0;
@@ -200,7 +227,7 @@ elif [[ "${palabra1,,}" == "-filterncolumnvalues" ]]
 	num=$3
 	PUNTERO=4
 	IT=0
-	cat MplsStops.csv | awk 'NR>1' > help.txt
+	cat $CSV_NOM | awk 'NR>1' > help.txt
 	while [ $IT -lt $num ]
 	do
 		columna=${!PUNTERO}
