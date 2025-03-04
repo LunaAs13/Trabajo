@@ -70,8 +70,12 @@ if [[ "${palabra1,,}" == "-help" ]]; then
 	echo "-help"
  	echo "-columnNames
   		Show all valid column names"
-    	echo "-columnValues [columnName]
-     		Show all the different values that appear in the specified column"
+    echo "-columnValues [columnName]
+    	Show all the different values that appear in the specified column"
+	echo "columnStats [columnName]
+		Show the number of occurances of each value in the column"
+	echo "-mostFrequenceValue [columnName]
+		Show the value that appear with most frequency in the column" 
 	echo "-filterColumn [columnName]
 		Show the records of a column"
 	echo "-filterColumnValue [columnName] [nValues] [value1] [value2] ... [valueN] 
@@ -101,6 +105,29 @@ elif [[ "${palabra1,,}" == "-columnvalues" ]]
   	numeroColumna $nombreColumna
  	cat MplsStops.csv | awk -F "," -v col="$numeroColumna" 'NR>1{print $col}' | sort -u
 
+elif [[ "${palabra1,,}" == "-columnstats" ]]
+	then
+		if [[ -z $2 ]]
+  		then
+			echo "Specify the column name"
+			exit 1
+			break
+    	fi
+		nombreColumna=$2
+  		numeroColumna $nombreColumna
+		cat MplsStops.csv | awk -F',' -v col="$numeroColumna" 'NR>1{print $col}' | sort | uniq -c | sort -nr
+	
+elif [[ "${palabra1,,}" == "-mostfrequencevalue" ]]
+	then 
+	if [[ -z $2 ]]
+  		then
+			echo "Specify the column name"
+			exit 1
+			break
+    	fi
+		nombreColumna=$2
+  		numeroColumna $nombreColumna
+		cat MplsStops.csv | awk -F',' -v col="$numeroColumna" 'NR>1{print $col}' | sort | uniq -c | sort -nr | head -n1 
 elif [[ "${palabra1,,}" == "-filtercolumn" ]] 
 	then
 	if [[ -z $2 ]]
