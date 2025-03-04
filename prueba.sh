@@ -8,13 +8,13 @@ CSV_NOM=$2
 
 function numeroColumna(){
 	nombre_buscar=$1
-	NOM_COLUMNAS=$(cat $CSV_NOM | head -n1 | sed 's/,/ /g' | sed -E 's/^[^[:space:]]+[[:space:]]*//')
+	NOM_COLUMNAS=$(cat $CSV_NOM | head -n1 | sed 's/,/ /g')
 	CNT=1
  	for NOMBRE in $NOM_COLUMNAS
   	do
    		if [[ $NOMBRE == $nombre_buscar ]]
      		then
-     			numeroColumna=$((CNT+1))
+     			numeroColumna=$((CNT))
 		else
   			((CNT++))
   		fi
@@ -22,15 +22,15 @@ function numeroColumna(){
 }
 
 
-if [[ "${palabra1,,}" == "-help" ]]; then	
+if [[ "${palabra1,,}" == "-help" ]]; then
 	echo "The use is ./filtro.sh [filterName] [argument]"
 	echo "The filters implemented are:"
 	echo "-help"
  	echo "-columnNames [CSV FILE]
   		Show all valid column names"
-    echo "-columnValues [CSV FILE] [columnName]
-     	Show all the different values that appear in the specified column"
-	echo "columnStats [CSV FILE] [columnName]
+    	echo "-columnValues [CSV FILE] [columnName]
+     		Show all the different values that appear in the specified column"
+	echo "-columnStats [CSV FILE] [columnName]
 		Show the number of occurances of each value in the column"
 	echo "-mostFrequentValue [CSV FILE] [columnName]
 		Show the value that appear with most frequency in the column" 
@@ -54,7 +54,7 @@ elif [[ "${palabra1,,}" == "-columnnames" ]]
  		echo "Second parameter must be a CSV file"
    		exit 1
    	fi
- 	cat $CSV_NOM | head -n1 | sed 's/,/ /g' | sed -E 's/^[^[:space:]]+[[:space:]]*//'
+ 	cat $CSV_NOM | head -n1 | sed 's/,/ /g'
 
 elif [[ "${palabra1,,}" == "-columnvalues" ]]
 	then
