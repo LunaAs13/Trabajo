@@ -94,8 +94,9 @@ elif [[ "${palabra1,,}" == "-columnvalues" ]]
  	if [[ -z $2 ]]
   	then
   		echo "Specify the column name"
-    		break
-      	fi
+		exit 1
+    	break
+    fi
  	nombreColumna=$2
   	numeroColumna $nombreColumna
  	cat MplsStops.csv | awk -F "," -v col="$numeroColumna" 'NR>1{print $col}' | sort -u
@@ -105,6 +106,7 @@ elif [[ "${palabra1,,}" == "-filtercolumn" ]]
 	if [[ -z $2 ]]
 	then
 		echo "Specify the column name"
+		exit 1
 		break
 	fi
 	nombreColumna=$2
@@ -123,7 +125,7 @@ elif [[ "${palabra1,,}" == "-filtercolumnvalue" ]]
 	if [[ ! "$3" =~ ^[0-9]+$ ]]
 	then
 		echo "The second parameter introduced must be the number of values you introduced"
-		exit 1
+		
 	fi
  
 	nombreColumna=$2
@@ -156,6 +158,7 @@ elif [[ "${palabra1,,}" == "-filterdate" ]]
 	if [[ -z $2 ]]
 		then
 			echo "The use of -filterDatee requires at least 1 parameter"
+			exit 1
 			break
 	fi
 	if [[ -z $3 ]]
@@ -189,6 +192,7 @@ elif [[ "${palabra1,,}" == "-filtertime" ]]
 		if [[ -z $2 ]]
 			then
 				echo "The use of -filterDatee requires at least 1 parameter"
+				exit 1
 				break
 		fi
 		if [[ -z $3 ]]
@@ -224,6 +228,7 @@ elif [[ "${palabra1,,}" == "-filterncolumnvalues" ]]
 		if [[ -z $2 || -z $3 || -z $4 ]]
 		then
 				echo "The use of -filterncolumnvalues requires at least 3 parameters"
+				exit 1
 				break
 		fi
 		if [[ ! "$2" =~ ^[0-9]+$ ]]
@@ -274,7 +279,10 @@ elif [[ "${palabra1,,}" == "-filterncolumnvalues" ]]
 
 else
 	echo "Argument not found. Use -help to see the options"
+	exit 1
 fi
+
+exit 0
 
 
 
