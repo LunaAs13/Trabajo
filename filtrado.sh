@@ -65,16 +65,21 @@ esac
 
 
 if [[ "${palabra1,,}" == "-help" ]]; then	
-	echo "The use is ./filtro.sh [argument]"
-	echo "The argument implemented are:"
+	echo "The use is ./filtro.sh [filterName] [argument]"
+	echo "The filters implemented are:"
 	echo "-help"
-	echo "-filterColumn columnName	; Show the records of a column"
-	echo "-filterColumnValue columnName nValues value1 value2 ...valueN	; Show all complete records with the indicated values in the column"
-	echo "-filterDate beginingDate endDate	; Shows all complete records between beginingDate and endDate if endDate is not 
-			indicated, it will show every record since beginingDate"
-	echo "-filterTime beginingTime endTime ; Shows all complete records between beginingTime and endTime if endTime is not 
-			indicated, it will show every record since beginingTime until midnight."
-   	echo "-filterNColumnValues nColunm column1 value1 .... columnN valueN	; Show all complete record that contains the n indicated values in the specified columns"
+	echo "-filterColumn [columnName]
+		Show the records of a column"
+	echo "-filterColumnValue [columnName] [nValues] [value1] [value2] ... [valueN] 
+		Show all complete records with the indicated values in the column"
+	echo "-filterDate [beginingDate] [endDate]
+		Shows all complete records between beginingDate and endDate if endDate is not 
+		indicated, it will show every record since beginingDate"
+	echo "-filterTime [beginingTime] [endTime]
+		Shows all complete records between beginingTime and endTime if endTime is not 
+		indicated, it will show every record since beginingTime until midnight."
+   	echo "-filterNColumnValues [nColunm] [column1] [value1] ... [columnN] [valueN]
+		Show all complete record that contains the n indicated values in the specified columns"
 	
 
 elif [[ "${palabra1,,}" == "-filtercolumn" ]] 
