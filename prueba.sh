@@ -28,8 +28,12 @@ if [[ "${palabra1,,}" == "-help" ]]; then
 	echo "-help"
  	echo "-columnNames [CSV FILE]
   		Show all valid column names"
-    	echo "-columnValues [CSV FILE] [columnName]
-     		Show all the different values that appear in the specified column"
+    echo "-columnValues [CSV FILE] [columnName]
+     	Show all the different values that appear in the specified column"
+	echo "columnStats [columnName]
+		Show the number of occurances of each value in the column"
+	echo "-mostFrequentValue [columnName]
+		Show the value that appear with most frequency in the column" 
 	echo "-filterColumn [CSV FILE] [columnName]
 		Show the records of a column"
 	echo "-filterColumnValue [CSV FILE] [columnName] [nValues] [value1] [value2] ... [valueN] 
