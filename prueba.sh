@@ -1,7 +1,5 @@
 #!/bin/bash
 
-#POSIBLES IMPLEMENTACIONES AÑADIDAS: caso mas comun en columna, numero de veces que aparece valor en columna, posibles valores de columna
-
 palabra1=$1
 numeroColumna=-1
 CSV_NOM=$2
@@ -47,76 +45,90 @@ if [[ "${palabra1,,}" == "-help" ]]; then
 
 elif [[ "${palabra1,,}" == "-columnnames" ]]
 	then
+	if [[ "$2" != *.csv ]]
+	then
+ 		echo "Second parameter must be a CSV file"
+   		exit 1
+   	fi
  	cat $CSV_NOM | head -n1 | sed 's/,/ /g' | sed -E 's/^[^[:space:]]+[[:space:]]*//'
 
 elif [[ "${palabra1,,}" == "-columnvalues" ]]
 	then
- 	if [[ -z $2 ]]
+ 	if [[ -z $2 || -z $3 ]]
   	then
-  		echo "Specify the CSV"
+  		echo "The use of -columnValues requires 2 parameters"
 		exit 1
-  	elif [[ -z $3 ]]
-   	then
-   		echo "Specify the column name"
-     		exit 1
-    	break
-    	fi
+ 	elif [[ "$2" != *.csv ]]
+	then
+ 		echo "Second parameter must be a CSV file"
+   		exit 1
+   	fi
+ 	
  	nombreColumna=$3
   	numeroColumna $nombreColumna
  	cat $CSV_NOM | awk -F "," -v col="$numeroColumna" 'NR>1{print $col}' | sort -u
 
 elif [[ "${palabra1,,}" == "-filtercolumn" ]] 
 	then
- 	if [[ -z $2 ]]
+ 	if [[ -z $2 || -z $3 ]]
   	then
-  		echo "Specify the CSV"
+  		echo "The use of -filterColumn requires 2 parameters"
 		exit 1
-  	elif [[ -z $3 ]]
-   	then
-   		echo "Specify the column name"
-     		exit 1
-    	break
-    	fi
+ 	elif [[ "$2" != *.csv ]]
+	then
+ 		echo "Second parameter must be a CSV file"
+   		exit 1
+   	fi
+    
 	nombreColumna=$3
 	numeroColumna $nombreColumna
 	cat $CSV_NOM  | awk -F "," -v col="$numeroColumna" 'NR>1{print $col}'
 
 elif [[ "${palabra1,,}" == "-columnstats" ]]
 	then
-		if [[ -z $3 || -z $2 ]]
-  		then
-			echo "The use of -columnStats requires 3 parameters"
-			exit 1
-			break
-    	fi
-		nombreColumna=$3
-  		numeroColumna $nombreColumna
-		cat $CSV_NOM | awk -F',' -v col="$numeroColumna" 'NR>1{print $col}' | sort | uniq -c | sort -nr
+ 	if [[ -z $2 || -z $3 ]]
+  	then
+  		echo "The use of -columnStats requires 2 parameters"
+		exit 1
+ 	elif [[ "$2" != *.csv ]]
+	then
+ 		echo "Second parameter must be a CSV file"
+   		exit 1
+   	fi
+    
+	nombreColumna=$3
+  	numeroColumna $nombreColumna
+	cat $CSV_NOM | awk -F',' -v col="$numeroColumna" 'NR>1{print $col}' | sort | uniq -c | sort -nr
 	
-elif [[ "${palabra1,,}" == "-mostfrequencevalue" ]]
-	then 
-	if [[ -z $3 ]]
-  		then
-			echo  "The use of -mostFrequenceValue requires 3 parameters"
-			exit 1
-			break
-    	fi
-		nombreColumna=$3
-  		numeroColumna $nombreColumna
-		cat $CSV_NOM | awk -F',' -v col="$numeroColumna" 'NR>1{print $col}' | sort | uniq -c | sort -nr | head -n1 
+elif [[ "${palabra1,,}" == "-mostfrequentvalue" ]]
+	then
+ 	if [[ -z $2 || -z $3 ]]
+  	then
+  		echo "The use of -mostFrequentValue requires 2 parameters"
+		exit 1
+ 	elif [[ "$2" != *.csv ]]
+	then
+ 		echo "Second parameter must be a CSV file"
+   		exit 1
+   	fi
+
+ 	nombreColumna=$3
+  	numeroColumna $nombreColumna
+	cat $CSV_NOM | awk -F',' -v col="$numeroColumna" 'NR>1{print $col}' | sort | uniq -c | sort -nr | head -n1 
  
 elif [[ "${palabra1,,}" == "-filtercolumnvalue" ]]
 	then
 	if [[ -z $2 || -z $3 || -z $4 || -z $5 ]]
 	then
-		echo "The use of -filterColumnValue requires 4 parameters"
+		echo "The use of -filterColumnValue requires at least 4 parameters"
 		exit 1
-		break
-	fi
-
-	if [[ ! "$4" =~ ^[0-9]+$ ]]
+ 	elif [[ "$2" != *.csv ]]
 	then
-		echo "The third parameter introduced must be the number of values you introduced"
+ 		echo "Second parameter must be a CSV file"
+   		exit 1
+	elif [[ ! "$4" =~ ^[0-9]+$ ]]
+	then
+		echo "The fourth parameter introduced must be the number of values you introduced"
 		exit 1
 		
 	fi
@@ -212,15 +224,17 @@ elif [[ "${palabra1,,}" == "-filtertime" ]]
 
 elif [[ "${palabra1,,}" == "-filterncolumnvalues" ]]
 	then
-		echo ""
-		if [[ -z $2 || -z $3 || -z $4 || -z $5 ]]
-		then
-			echo "The use of -filterNColumnValues requires at least 4 parameters"
-			exit 1
-		fi
-		if [[ ! "$3" =~ ^[0-9]+$ ]]
-		then
-			echo "The third parameter introduced must be the number of values you introduced"
+	if [[ -z $2 || -z $3 || -z $4 || -z $5 ]]
+	then
+		echo "The use of -filterNColumnValues requires at least 4 parameters"
+		exit 1
+ 	elif [[ "$2" != *.csv ]]
+	then
+ 		echo "Second parameter must be a CSV file"
+   		exit 1
+	elif [[ ! "$3" =~ ^[0-9]+$ ]]
+	then
+		echo "The third parameter introduced must be the number of values you introduced"
 		exit 1
 	fi
 		
