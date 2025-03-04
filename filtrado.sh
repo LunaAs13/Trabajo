@@ -71,7 +71,7 @@ if [[ "${palabra1,,}" == "-help" ]]; then
  	echo "-columnNames
   		Show all valid column names"
     	echo "-columnValues [columnName]
-     		Show all values that appear in the specified column"
+     		Show all the different values that appear in the specified column"
 	echo "-filterColumn [columnName]
 		Show the records of a column"
 	echo "-filterColumnValue [columnName] [nValues] [value1] [value2] ... [valueN] 
@@ -85,11 +85,11 @@ if [[ "${palabra1,,}" == "-help" ]]; then
    	echo "-filterNColumnValues [nColunm] [column1] [value1] ... [columnN] [valueN]
 		Show all complete record that contains the n indicated values in the specified columns"
 
-elif [[ "${palabra,,}" == -columnnames ]]
+elif [[ "${palabra1,,}" == "-columnnames" ]]
 	then
  	cat MplsStops.csv | head -n1 | sed 's/,/ /g' | sed -E 's/^[^[:space:]]+[[:space:]]*//'
 
-elif [[ "${palabra,,}" == -columnvalues ]]
+elif [[ "${palabra1,,}" == "-columnvalues" ]]
 	then
  	if [[ -z $2 ]]
   	then
