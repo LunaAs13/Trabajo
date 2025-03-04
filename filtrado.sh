@@ -68,6 +68,8 @@ if [[ "${palabra1,,}" == "-help" ]]; then
 	echo "The use is ./filtro.sh [filterName] [argument]"
 	echo "The filters implemented are:"
 	echo "-help"
+ 	echo "-columnNames
+  		Show all valid column names"
 	echo "-filterColumn [columnName]
 		Show the records of a column"
 	echo "-filterColumnValue [columnName] [nValues] [value1] [value2] ... [valueN] 
@@ -80,7 +82,21 @@ if [[ "${palabra1,,}" == "-help" ]]; then
 		indicated, it will show every record since beginingTime until midnight."
    	echo "-filterNColumnValues [nColunm] [column1] [value1] ... [columnN] [valueN]
 		Show all complete record that contains the n indicated values in the specified columns"
-	
+
+elif [[ "${palabra,,}" == -columnnames ]]
+	then
+ 	cat MplsStops.csv | head -n1 | sed 's/,/ /g' | sed -E 's/^[^[:space:]]+[[:space:]]*//'
+
+elif [[ "${palabra,,}" == -columnvalues ]]
+	then
+ 	if [[ -z $2 ]]
+  	then
+  		echo "Specify the column name"
+    		break
+      	fi
+ 	nombreColumna=$2
+  	numeroColumna $nombreColumna
+ 	cat MplsStops.csv | awk -F "," -v col="$numeroColumna" 'NR>1{print $col}' | sort -u
 
 elif [[ "${palabra1,,}" == "-filtercolumn" ]] 
 	then
