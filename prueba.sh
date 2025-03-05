@@ -161,7 +161,7 @@ elif [[ "${palabra1,,}" == "-filterdate" ]]
 	then
 	if [[ -z $2 || -z $3 ]]
 		then
-			echo "The use of -filterDatee requires at least 2 parameter"
+			echo "The use of -filterDate requires at least 2 parameter"
 			exit 1
 			break
    	elif [[ "$2" != *.csv ]]
@@ -215,7 +215,7 @@ elif [[ "${palabra1,,}" == "-filtertime" ]]
 
 	else
 		
-		cat $CSV_NOM | awk -F "," -v timeIni="$2" -v timeFin="$3" 'NR>1{
+		cat $CSV_NOM | awk -F "," -v timeIni="$3" -v timeFin="$4" 'NR>1{
 				split($3, time, "T");
 				if (time[2] >= timeIni && time[2] <= timeFin) {
 					print $0;
