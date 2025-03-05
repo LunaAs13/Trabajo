@@ -275,7 +275,7 @@ elif [[ "${palabra1,,}" == "-filterncolumnvalues" ]]
 	rm help.txt
 
 else
-	echo "Argument not found. Use -help to see the options"
+	echo "Filter not found. Use -help to see the options"
 	exit 1
 fi
 
