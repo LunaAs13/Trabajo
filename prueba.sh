@@ -159,16 +159,20 @@ elif [[ "${palabra1,,}" == "-filtercolumnvalue" ]]
   
 elif [[ "${palabra1,,}" == "-filterdate" ]]
 	then
-	if [[ -z $2 ]]
+	if [[ -z $2 || -z $3 ]]
 		then
-			echo "The use of -filterDatee requires at least 1 parameter"
+			echo "The use of -filterDatee requires at least 2 parameter"
 			exit 1
 			break
+   	elif [[ "$2" != *.csv ]]
+	then
+ 		echo "Second parameter must be a CSV file"
+   		exit 1
 	fi
-	if [[ -z $3 ]]
+	if [[ -z $4 ]]
 		then
 			
-			cat $CSV_NOM | awk -F "," -v fechaIni="$2" 'NR>1{
+			cat $CSV_NOM | awk -F "," -v fechaIni="$3" 'NR>1{
 				split($3, fecha, "T");
 				if (fecha[1] >= fechaIni) {
 					print $0;
@@ -177,7 +181,7 @@ elif [[ "${palabra1,,}" == "-filterdate" ]]
 			}'
 
 	else 
-		cat $CSV_NOM | awk -F "," -v fechaIni="$2" -v fechaFin="$3" 'NR>1{
+		cat $CSV_NOM | awk -F "," -v fechaIni="$3" -v fechaFin="$4" 'NR>1{
 				split($3, fecha, "T");
 				if (fecha[1] >= fechaIni && fecha[1] <= fechaFin) {
 					print $0;
@@ -188,16 +192,20 @@ elif [[ "${palabra1,,}" == "-filterdate" ]]
  
 elif [[ "${palabra1,,}" == "-filtertime" ]]
 	then 
-		if [[ -z $2 ]]
+		if [[ -z $2 || -z $3 ]]
 			then
-				echo "The use of -filterTime requires at least 1 parameter"
+				echo "The use of -filterTime requires at least 2 parameter"
 				exit 1
 				break
+    		elif [[ "$2" != *.csv ]]
+			then
+ 			echo "Second parameter must be a CSV file"
+   			exit 1
 		fi
-		if [[ -z $3 ]]
+		if [[ -z $4 ]]
 		then
 			
-			cat $CSV_NOM | awk -F "," -v timeIni="$2" 'NR>1{
+			cat $CSV_NOM | awk -F "," -v timeIni="$3" 'NR>1{
 				split($3, time, "T");
 				if (time[2] >= timeIni) {
 					print $0;
