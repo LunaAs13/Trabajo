@@ -177,11 +177,6 @@ elif [[ "${palabra1,,}" == "-filterdate" ]]
 			}'
 
 	else 
-		if [[ ! "$3" =~ ^[a-zA-Z]+$ ]]
-		then
-			echo "The value of $3 is not a string"
-			exit 1
-		fi
 		cat $CSV_NOM | awk -F "," -v fechaIni="$2" -v fechaFin="$3" 'NR>1{
 				split($3, fecha, "T");
 				if (fecha[1] >= fechaIni && fecha[1] <= fechaFin) {
@@ -195,7 +190,7 @@ elif [[ "${palabra1,,}" == "-filtertime" ]]
 	then 
 		if [[ -z $2 ]]
 			then
-				echo "The use of -filterDatee requires at least 1 parameter"
+				echo "The use of -filterTime requires at least 1 parameter"
 				exit 1
 				break
 		fi
@@ -211,11 +206,7 @@ elif [[ "${palabra1,,}" == "-filtertime" ]]
 			}' 
 
 	else
-		if [[ ! "$3" =~ ^[a-zA-Z]+$ ]]
-			then
-				echo "The value of $3 is not a string"
-				exit 1
-		fi
+		
 		cat $CSV_NOM | awk -F "," -v timeIni="$2" -v timeFin="$3" 'NR>1{
 				split($3, time, "T");
 				if (time[2] >= timeIni && time[2] <= timeFin) {
